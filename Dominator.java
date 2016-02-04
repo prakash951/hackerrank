@@ -47,9 +47,9 @@ class Ideone
 				map.get(a1).add(b1);
 			}
 		}
-		System.out.println(map);
+		//System.out.println(map);
 		bfs(map);
-		System.out.println(map);
+		System.out.println(set);
 	}
 	
 	public static void bfs(HashMap<Node,ArrayList<Node>> map)
@@ -58,6 +58,8 @@ class Ideone
 		Queue<Node> queue = new LinkedList<Node>();
 		Node xyz = map.keySet().iterator().next();
 		queue.add(xyz);
+		int level = 1;
+		xyz.level = 1;
 		xyz.flag = true;
 		while(queue.size() > 0)
 		{
@@ -70,7 +72,22 @@ class Ideone
 				{
 					if(!z.get(i).flag)
 					{
-						z.get(i).pred.addAll(xyz.pred);
+						if(z.get(i).predessor==null)
+						{
+							z.get(i).predessor = xyz;
+							z.get(i).pred.addAll(xyz.pred);
+						}							
+						else
+						{
+							if(z.get(i).predessor.vertex != xyz.vertex)
+							{
+								z.get(i).predessor = xyz.predessor;
+								z.get(i).pred.clear();
+								z.get(i).pred.add(z.get(i));
+								z.get(i).pred.addAll(xyz.predessor!=null ? xyz.predessor.pred : null);
+							}
+						}
+						z.get(i).level = z.get(i).level==0?xyz.level + 1:z.get(i).level;
 						queue.add(z.get(i));
 					}
 				}
@@ -83,6 +100,9 @@ class Node
 	int vertex;
 	HashSet<Node> pred = null;
 	boolean flag;
+	int level;
+	Node predessor;
+	
 	public Node(int vertex)
 	{
 		this.vertex = vertex;
@@ -99,13 +119,14 @@ class Node
 	public String toString()
 	{
 		StringBuffer buffer = new StringBuffer();
-		buffer.append("{");
+		buffer.append("(");
 		Iterator<Node> it = pred.iterator();
 		while(it.hasNext())
 		{
 			buffer.append(it.next().vertex+",");
 		}
-		buffer.append("}");
-		return "{\t"+vertex+":\t"+ buffer.toString() +"}";
+		buffer.append(")");
+		String cobra = predessor!=null ? ""+predessor.vertex : null;
+		return "[\tVertex:"+ vertex + ",\t Dominators:{\t"+ buffer.toString() +"},\tPredessor:"+ cobra +",\t Level:"+level+"]";
 	}
 }
