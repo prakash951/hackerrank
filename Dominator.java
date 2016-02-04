@@ -72,19 +72,19 @@ class Ideone
 				{
 					if(!z.get(i).flag)
 					{
-						if(z.get(i).predessor==null)
+						if(z.get(i).predecessor==null)
 						{
-							z.get(i).predessor = xyz;
+							z.get(i).predecessor = xyz;
 							z.get(i).pred.addAll(xyz.pred);
 						}							
 						else
 						{
-							if(z.get(i).predessor.vertex != xyz.vertex)
+							if(z.get(i).predecessor.vertex != xyz.vertex)
 							{
-								z.get(i).predessor = xyz.predessor;
+								z.get(i).predecessor = xyz.predecessor;
 								z.get(i).pred.clear();
 								z.get(i).pred.add(z.get(i));
-								z.get(i).pred.addAll(xyz.predessor!=null ? xyz.predessor.pred : null);
+								z.get(i).pred.addAll(xyz.predecessor!=null ? xyz.predecessor.pred : null);
 							}
 						}
 						z.get(i).level = z.get(i).level==0?xyz.level + 1:z.get(i).level;
@@ -101,7 +101,7 @@ class Node
 	HashSet<Node> pred = null;
 	boolean flag;
 	int level;
-	Node predessor;
+	Node predecessor;
 	
 	public Node(int vertex)
 	{
@@ -126,7 +126,7 @@ class Node
 			buffer.append(it.next().vertex+",");
 		}
 		buffer.append(")");
-		String cobra = predessor!=null ? ""+predessor.vertex : null;
-		return "[\tVertex:"+ vertex + ",\t Dominators:{\t"+ buffer.toString() +"},\tPredessor:"+ cobra +",\t Level:"+level+"]";
+		String cobra = predecessor!=null ? ""+predecessor.vertex : null;
+		return "[\t Vertex:"+ vertex + ",\t Dominators:{\t"+ buffer.toString() +"},\t Predecessor:"+ cobra +",\t Level:"+level+"]";
 	}
 }
